@@ -9,4 +9,6 @@ import kodlamaio.hrms.entities.concretes.Job;
 public interface JobService {
 	DataResult<List<Job>> getAll();
 	Result add(Job job);
+	Result update(Job job);
+	DataResult<Job> getById(int id);
 }

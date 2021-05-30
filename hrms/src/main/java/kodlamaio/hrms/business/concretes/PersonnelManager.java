@@ -36,14 +36,9 @@ public class PersonnelManager implements PersonnelService{
 	}
 
 	public Result approveEmployer(Employer employer) {
-		List<Employer> employers = this.employerService.getAll().getData();
-		for(int i=0;i<employers.toArray().length;i++) {
-			if(employers.get(i).getId() == employer.getId()) {
-				employer.setAdminApproval(true);
-				return new SuccessResult("admin approval is completed, employer status is active");
-			}
-		}
-		return new ErrorResult("admin approval is not successful.");
+		employer.setAdminApproval(true);
+		this.employerService.update(employer);
+		return new SuccessResult("admin approval is completed, employer status is active");
 	}
 
 	@Override

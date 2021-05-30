@@ -30,7 +30,12 @@ public class JobManager implements JobService{
 	public DataResult<List<Job>> getAll() {
 		return new SuccessDataResult<List<Job>>(this.jobDao.findAll());
 	}
-
+	
+	@Override
+	public DataResult<Job> getById(int id) {
+		return new SuccessDataResult<Job>(this.jobDao.findById(id).orElse(null));
+	}
+	
 	@Override
 	public Result add(Job job) {
 		boolean result = jobExists(job);
@@ -41,6 +46,12 @@ public class JobManager implements JobService{
 			this.jobDao.save(job);
 			return new SuccessResult("Job is added");
 		}
+	}
+
+	@Override
+	public Result update(Job job) {
+		this.jobDao.save(job);
+		return new SuccessResult("Job updated");
 	}
 
 	public boolean jobExists(Job job) {

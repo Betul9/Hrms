@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.EmailService;
 import kodlamaio.hrms.business.abstracts.EmployerService;
+import kodlamaio.hrms.business.abstracts.JobService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
@@ -16,23 +17,31 @@ import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.EmployerDao;
 import kodlamaio.hrms.entities.concretes.Employer;
+import kodlamaio.hrms.entities.concretes.Job;
 
 @Service
 public class EmployerManager implements EmployerService {
 	
 	private EmployerDao employerDao;
 	private EmailService emailService;
+	private JobService jobService;
 
 	@Autowired
-	public EmployerManager(EmployerDao employerDao, EmailService emailService) {
+	public EmployerManager(EmployerDao employerDao, EmailService emailService, JobService jobService) {
 		super();
 		this.employerDao = employerDao;
 		this.emailService = emailService;
+		this.jobService = jobService;
 	}
 
 	@Override
 	public DataResult<List<Employer>> getAll() {
 		return new SuccessDataResult<List<Employer>>(this.employerDao.findAll());
+	}
+	
+	@Override
+	public DataResult<Employer> getByEmail(String email) {
+		return new SuccessDataResult<Employer>(this.employerDao.getByEmail(email));
 	}
 	
 	@Override
@@ -50,6 +59,18 @@ public class EmployerManager implements EmployerService {
 		employer.setVerificationStatus(false);
 		this.employerDao.save(employer);
 		return new SuccessResult("Employer added, plese verify your email");
+	}
+	
+	@Override
+	public Result update(Employer employer) {
+		this.employerDao.save(employer);
+		return new SuccessResult("Employer updated");
+	}
+	
+	public Result closeJob(Job job) {
+		job.setJobStatus(false);
+		this.jobService.update(job);
+		return new SuccessResult("Job status changed to passive");
 	}
 	
 	private Result checkDomain(String email, String website) {
@@ -74,11 +95,8 @@ public class EmployerManager implements EmployerService {
 	}
 	
 	private Result checkIfEmailExists(String email) {
-		List<Employer> employers = this.employerDao.findAll();
-		for(int i=0;i<employers.size();i++) {
-			if(employers.get(i).getEmail().equals(email)) {
-				return new ErrorResult("The email address is already taken");
-			}
+		if(this.employerDao.getByEmail(email) != null) {
+			return new ErrorResult("The email address is already taken");
 		}
 		
 		return new SuccessResult();

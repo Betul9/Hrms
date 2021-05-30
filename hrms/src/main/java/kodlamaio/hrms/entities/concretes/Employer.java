@@ -1,20 +1,31 @@
 package kodlamaio.hrms.entities.concretes;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name="employers")
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","jobs"})
 public class Employer {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
 	@Column(name="id")
 	private int id;
@@ -34,26 +45,12 @@ public class Employer {
 	@Column(name="phone_number")
 	private long phoneNumber;
 	
+	@OneToMany(mappedBy="employer")
+	private List<Job> jobs;
+	
 	@Column(name="verification_status")
 	private boolean verificationStatus;
 	
 	@Column(name="admin_approval")
-	private boolean adminApproval;
-	
-	public Employer() {}
-
-	public Employer(int id, String companyName, String website, String email, String password,
-			long phoneNumber, boolean verificationStatus, boolean adminApproval) {
-		super();
-		this.id = id;
-		this.companyName = companyName;
-		this.website = website;
-		this.email = email;
-		this.password = password;
-		this.phoneNumber = phoneNumber;
-		this.verificationStatus = verificationStatus;
-		this.adminApproval = adminApproval;
-	}
-	
-	
+	private boolean adminApproval;	
 }
