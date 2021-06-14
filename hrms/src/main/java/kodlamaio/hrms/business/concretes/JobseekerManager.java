@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import kodlamaio.hrms.business.abstracts.EmailService;
 import kodlamaio.hrms.business.abstracts.JobseekerService;
 import kodlamaio.hrms.business.abstracts.MernisService;
+import kodlamaio.hrms.business.abstracts.UserService;
+import kodlamaio.hrms.core.entities.User;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
@@ -25,13 +27,16 @@ public class JobseekerManager implements JobseekerService{
 	private JobseekerDao jobseekerDao;
 	private MernisService mernisService;
 	private EmailService emailService;
+	private UserService userService;
 	
 	@Autowired
-	public JobseekerManager(JobseekerDao jobseekerDao, MernisService mernisService, EmailService emailService) {
+	public JobseekerManager(JobseekerDao jobseekerDao, MernisService mernisService, 
+			EmailService emailService, UserService userService) {
 		super();
 		this.jobseekerDao = jobseekerDao;
 		this.mernisService = mernisService;
 		this.emailService = emailService;
+		this.userService = userService;
 	}
 
 	@Override
@@ -54,7 +59,7 @@ public class JobseekerManager implements JobseekerService{
 			return new ErrorResult("Mernis verification is unsuccessful");
 		}
 		
-		this.emailService.emailVerificationForJobseeker(jobseeker.getEmail()).IsSuccess();
+		this.emailService.emailVerification(jobseeker.getEmail()).IsSuccess();
 		
 		this.jobseekerDao.save(jobseeker);
 		return new SuccessResult("Mernis and email verification is completed successfully, jobseeker added");
@@ -73,13 +78,10 @@ public class JobseekerManager implements JobseekerService{
 	}
 	
 	private Result checkIfEmailExists(String email) {
-		List<Jobseeker> jobseekers = this.jobseekerDao.findAll();
-		
-		for(int i=0; i<jobseekers.toArray().length; i++) {
-			if(jobseekers.get(i).getEmail().equals(email)) {
-				return new ErrorResult("The email address is taken");
-			}
+		if(this.userService.getByEmail(email) != null) {
+			return new ErrorResult("The email address is taken");
 		}
+
 		return new SuccessResult();
 	}
 	

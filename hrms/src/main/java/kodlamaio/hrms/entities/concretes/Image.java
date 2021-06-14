@@ -9,22 +9,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import kodlamaio.hrms.core.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name="personnels")
+@Table(name="images")
 @AllArgsConstructor
 @NoArgsConstructor
-@PrimaryKeyJoinColumn(name="id", referencedColumnName = "id")
-public class Personnel extends User{
+public class Image {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +29,11 @@ public class Personnel extends User{
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="first_name")
-	private String firstName;
+	@Column(name="image_url")
+	private String imageUrl;
 	
-	@Column(name="last_name")
-	private String lastName;
-	
+	@ManyToOne()
+	@JoinColumn(name="jobseeker_id")
+	private Jobseeker jobseeker;
+
 }

@@ -47,8 +47,8 @@ public class EmployerManager implements EmployerService {
 	@Override
 	public Result add(Employer employer) {
 		List<Result> results = new ArrayList<Result>(Arrays.asList(allAreasFilled(employer), 
-				checkIfEmailExists(employer.getEmail()),
-				checkDomain(employer.getEmail(), employer.getWebsite())));
+				checkIfEmailExists(employer.getUser().getEmail()),
+				checkDomain(employer.getUser().getEmail(), employer.getWebsite())));
 		
 		for(int i=0; i<results.size();i++) {
 			if(!results.get(i).IsSuccess()) {
@@ -85,7 +85,7 @@ public class EmployerManager implements EmployerService {
 	
 	private Result allAreasFilled(Employer employer) {
 		if(!employer.getCompanyName().trim().equals("") && employer.getCompanyName().trim() != null
-				&& !employer.getEmail().trim().equals("") && employer.getEmail().trim() != null
+				&& !employer.getUser().getEmail().trim().equals("") && employer.getUser().getEmail().trim() != null
 				&& employer.getPhoneNumber() != 0
 				&& !employer.getWebsite().trim().equals("") && employer.getWebsite().trim() != null
 				) {

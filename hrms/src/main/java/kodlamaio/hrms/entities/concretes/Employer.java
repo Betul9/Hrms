@@ -7,11 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import kodlamaio.hrms.core.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +26,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","jobs"})
-public class Employer {
+@PrimaryKeyJoinColumn(name="id", referencedColumnName = "id")
+public class Employer extends User{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +41,6 @@ public class Employer {
 	@Column(name="website")
 	private String website;
 	
-	@Column(name="email")
-	private String email;
-	
-	@Column(name="password")
-	private String password;
-	
 	@Column(name="phone_number")
 	private long phoneNumber;
 	
@@ -53,4 +52,8 @@ public class Employer {
 	
 	@Column(name="admin_approval")
 	private boolean adminApproval;	
+	
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private User user;
 }

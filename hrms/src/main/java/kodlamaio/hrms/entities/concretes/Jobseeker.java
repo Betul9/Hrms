@@ -7,8 +7,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import kodlamaio.hrms.core.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +29,9 @@ import lombok.NoArgsConstructor;
 @Table(name="jobseekers")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Jobseeker {
+@PrimaryKeyJoinColumn(name="id", referencedColumnName = "id")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Jobseeker extends User{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
@@ -37,12 +50,34 @@ public class Jobseeker {
 	@Column(name="birth_year")
 	private int birthYear;
 	
-	@Column(name="email")
-	private String email;
-	
-	@Column(name="password")
-	private String password;
-	
 	@Column(name="verification_status")
 	private boolean verificationStatus;	
+	
+	@Column(name="covering_letter")
+	private String coveringLetter;
+	
+	@Column(name="github_link")
+	private String githubLink;
+	
+	@Column(name="linkedin_link")
+	private String linkedinLink;
+	
+	@Column(name="abilities")
+	private String abilities;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="jobseeker")
+	private List<Image> images;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="jobseeker")
+	private List<ForeignLanguage> foreignLanguages;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="jobseeker")
+	private List<GradSchool> gradSchools;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="jobseeker")
+	private List<JobExperience> jobExperiences;
 }
