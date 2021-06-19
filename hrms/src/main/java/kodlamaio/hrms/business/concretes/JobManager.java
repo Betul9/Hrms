@@ -64,4 +64,14 @@ public class JobManager implements JobService{
 		}
 		return true;
 	}
+
+	@Override
+	public DataResult<List<Job>> getByJobStatusTrue() {
+		return new SuccessDataResult<List<Job>>(this.jobDao.findByJobStatusTrue());
+	}
+	
+	@Override
+	public DataResult<List<Job>> getByJobStatusFalse() {
+		return new SuccessDataResult<List<Job>>(this.jobDao.findByJobStatusFalse());
+	}
 }

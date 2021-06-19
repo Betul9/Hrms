@@ -11,4 +11,6 @@ public interface JobService {
 	Result add(Job job);
 	Result update(Job job);
 	DataResult<Job> getById(int id);
+	DataResult<List<Job>> getByJobStatusTrue();
+	DataResult<List<Job>> getByJobStatusFalse();
 }

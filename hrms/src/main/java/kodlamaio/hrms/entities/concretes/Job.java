@@ -52,6 +52,12 @@ public class Job{
 	@Column(name="job_status")
 	private boolean jobStatus;
 	
+	@Column(name="working_time")
+	private String workingTime;
+	
+	@Column(name="working_type")
+	private String workingType;
+	
 	@ManyToOne()
 	@JoinColumn(name="owner_id")
 	private Employer employer;

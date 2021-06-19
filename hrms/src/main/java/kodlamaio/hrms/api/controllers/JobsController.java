@@ -33,8 +33,23 @@ public class JobsController {
 		return this.jobService.getAll();
 	}
 	
+	@GetMapping("/getbyid")
+	public DataResult<Job> getById(int id){
+		return this.jobService.getById(id);
+	}
+	
 	@PostMapping("/add")
 	public Result add(@RequestBody Job job) {
 		return this.jobService.add(job);
+	}
+	
+	@GetMapping("/getbyisactivetrue")
+	public DataResult<List<Job>> getByIsActiveTrue() {
+		return this.jobService.getByJobStatusTrue();
+	}
+	
+	@GetMapping("/getbyisactivefalse")
+	public DataResult<List<Job>> getByIsActiveFalse() {
+		return this.jobService.getByJobStatusFalse();
 	}
 }

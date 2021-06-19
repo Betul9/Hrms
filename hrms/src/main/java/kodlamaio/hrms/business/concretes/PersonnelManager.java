@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.EmployerService;
+import kodlamaio.hrms.business.abstracts.JobService;
 import kodlamaio.hrms.business.abstracts.PersonnelService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
@@ -14,6 +15,7 @@ import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.PersonnelDao;
 import kodlamaio.hrms.entities.concretes.Employer;
+import kodlamaio.hrms.entities.concretes.Job;
 import kodlamaio.hrms.entities.concretes.Jobseeker;
 import kodlamaio.hrms.entities.concretes.Personnel;
 
@@ -22,12 +24,16 @@ public class PersonnelManager implements PersonnelService{
 
 	private PersonnelDao personnelDao;
 	private EmployerService employerService;
+	private JobService jobService;
 	
 	@Autowired
-	public PersonnelManager(PersonnelDao personnelDao, EmployerService employerService) {
+	public PersonnelManager(PersonnelDao personnelDao, 
+			EmployerService employerService,
+			JobService jobService) {
 		super();
 		this.personnelDao = personnelDao;
 		this.employerService = employerService;
+		this.jobService = jobService;
 	}
 
 	@Override
@@ -45,5 +51,12 @@ public class PersonnelManager implements PersonnelService{
 	public Result add(Personnel personnel) {
 		this.personnelDao.save(personnel);
 		return new SuccessResult("personnel added");
+	}
+
+	@Override
+	public Result approveJob(Job job) {
+		job.setJobStatus(true);
+		this.jobService.update(job);
+		return new SuccessResult("job approval is completed successfully");
 	}
 }

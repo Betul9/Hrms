@@ -15,6 +15,7 @@ import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.entities.concretes.Employer;
+import kodlamaio.hrms.entities.concretes.Job;
 import kodlamaio.hrms.entities.concretes.Personnel;
 
 @RestController
@@ -43,5 +44,10 @@ public class PersonnelsController {
 	@PostMapping("/approveemployer")
 	public Result approveEmployer(@RequestBody Employer employer) {
 		return this.personnelService.approveEmployer(employer);
+	}
+	
+	@PostMapping("/approvejob")
+	public Result approveJob(@RequestBody Job job) {
+		return this.personnelService.approveJob(job);
 	}
 }
